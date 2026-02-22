@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseCal | Master Your Money</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="landing-page">
+    <nav class="landing-nav">
+        <div class="logo">Expense<span>Cal</span></div>
+        <div class="nav-links">
+            <a href="login.html" class="login-link">Login</a>
+            <a href="signup.html" class="signup-btn">Get Started</a>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>Take Control of Your <span class="highlight">Financial Future</span></h1>
+            <p>Track expenses, set budgets, and see your money grow with our all-in-one expense calculator.</p>
+            <div class="hero-btns">
+                <a href="signup.html" class="cta-btn">Get Started for Free <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="hero-image">
+        </div>
+
+    </header>
+    <section class="landing-info reveal">
+        <div class="container">
+            <h2 class="section-title">Why Use <span class="highlight">ExpenseCal?</span></h2>
+
+            <div class="info-grid">
+                <div class="blog-text reveal">
+                    <h3>More than just a calculator</h3>
+                    <p>In today's fast-paced world, money flows in and out faster than we can track.
+                        <strong>ExpenseCal</strong> was built to bridge the gap between earning and saving. Whether
+                        you are a student managing a pocket money or a professional tracking salary, our tool
+                        provides the clarity you need.
+                    </p>
+                    <p>Our mission is simple: To provide a 100% private, browser-based solution where your financial
+                        data stays with you, not on some remote server. No hidden fees, just pure financial
+                        tracking.</p>
+                    <ul class="benefit-list">
+                        <li><i class="fas fa-check-circle"></i> <strong>Privacy First:</strong> Data is stored
+                            locally.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Visual Insights:</strong> Beautiful charts
+                            for easy understanding.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Responsive:</strong> Works on your gym-break
+                            or at your desk.</li>
+                    </ul>
+                </div>
+
+                <div class="feature-cards reveal">
+                    <div class="f-card">
+                        <i class="fas fa-bolt"></i>
+                        <h4>Instant Logging</h4>
+                        <p>Add income or expense in less than 5 seconds.</p>
+                    </div>
+                    <div class="f-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h4>Smart Analytics</h4>
+                        <p>Automatically categorizes your spending habits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+<script>
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 100;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+
+    window.addEventListener("scroll", reveal);
+    // Page load hote hi chalna chahiye taaki Hero ke pass wala text dikh jaye
+    window.addEventListener("load", reveal);
+
+    window.onscroll = function () {
+        var nav = document.querySelector('.landing-nav');
+        if (window.pageYOffset > 50) {
+            nav.style.background = "rgba(15, 23, 42, 0.9)"; // Darker on scroll
+        } else {
+            nav.style.background = "rgba(255, 255, 255, 0.05)"; // Transparent at top
+        }
+    };
+
+
+</script>
+</body>
+
+</html>
