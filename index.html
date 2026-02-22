@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="mobile-header">
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
+        <div class="mobile-logo">EXPENSE CAL</div>
+    </div>
+
+    <div class="sidebar">
+        <div class="logo">
+            <h2>EXPENSE CAL</h2>
+            <button class="menu-toggle close-sidebar-btn" onclick="toggleSidebar()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+
+        <nav class="nav-menu">
+            <button class="nav-btn active" onclick="showSection('dashboard')">
+                <span class="material-icons nav-icon">dashboard</span>
+                <span class="text">DASHBOARD</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('history')">
+                <span class="material-icons nav-icon">history</span>
+                <span class="text">HISTORY</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('settings')">
+                <span class="material-icons nav-icon">settings</span>
+                <span class="text">SETTINGS</span>
+            </button>
+            <button class="nav-btn logout-btn" onclick="logout()">
+                <span class="material-icons nav-icon">logout</span>
+                <span class="text">LOGOUT</span>
+            </button>
+        </nav>
+    </div>
+
+    <div class="main-content" id="main-content">
+
+        <div id="dashboard-section">
+
+            <div class="top-nav-sticky"
+                style="position: sticky; top: 0; z-index: 100; background: #3062d6; padding-bottom: 10px;">
+                <div class="title-container">
+                    <div class="welcome-text">
+                        <h1>Hello, <span id="user-name">User</span>! 👋</h1>
+                        <p>Welcome to your expense tracker.</p>
+                    </div>
+                    <div class="profile-wrapper" onclick="toggleMenu()">
+                        <div class="profile-pic" id="profile-initial">U</div>
+                        <div class="sub-menu-wrap" id="subMenu">
+                            <div class="sub-menu">
+                                <div class="user-info">
+                                    <h3 id="dropdown-name">User Name</h3>
+                                </div>
+                                <hr>
+                                <a href="#" class="sub-menu-link" onclick="showSection('settings')">
+                                    <span class="material-icons">settings</span>
+                                    <p>Settings</p>
+                                    <span>></span>
+                                </a>
+                                <a href="#" class="sub-menu-link" onclick="logout()">
+                                    <span class="material-icons" style="color:red;">logout</span>
+                                    <p style="color:red;">Logout</p>
+                                    <span>></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card total-expense">
+                    <h3>TOTAL BALANCE</h3>
+                    <h1 id="total-display">₹ <span id="total-balance">0</span></h1>
+                </div>
+                <div class="card daily-avg">
+                    <h3>DAILY AVERAGE</h3>
+                    <h1>₹ <span id="average-spend">0</span></h1>
+                </div>
+                <div class="card top-cat">
+                    <h3>TOP CATEGORY</h3>
+                    <h1 id="top-category">None</h1>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-section">
+                    <h3>EXPENSE BREAKDOWN 📊</h3>
+                    <div class="chart-box">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+                <div class="transaction-section">
+                    <div class="recent-header">
+                        <h3>RECENT ACTIVITY</h3>
+                        <button class="add-btn" onclick="openModal()">+ Add New</button>
+                    </div>
+                    <ul id="transaction-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="history-section" style="display: none;">
+            <div class="title-container">
+                <div class="welcome-text">
+                    <h1>Spending History</h1>
+                    <p>Track your weekly and monthly expenses</p>
+                </div>
+            </div>
+
+            <div class="history-container">
+                <div class="history-controls" style="margin: 0 30px 20px 30px;">
+                    <div class="search-bar-container"
+                        style="background: white; padding: 10px; border-radius: 10px; display: flex; align-items: center; margin-bottom: 15px;">
+                        <span class="material-icons" style="color:#777; margin-right:10px;">search</span>
+                        <input type="text" id="search-input" placeholder="Search transactions..."
+                            onkeyup="applyFilters()" style="border:none; outline:none; width:100%;">
+                    </div>
+                    <div class="history-tabs" style="display: flex; gap: 10px;">
+                        <button class="tab-btn active" onclick="setTab('all')" id="tab-all">All</button>
+                        <button class="tab-btn" onclick="setTab('week')" id="tab-week">This Week</button>
+                        <button class="tab-btn" onclick="setTab('month')" id="tab-month">This Month</button>
+                    </div>
+                </div>
+
+                <div class="history-summary"
+                    style="margin: 0 30px 20px 30px; background: white; padding: 15px; border-radius: 10px; font-weight: bold; color: #333;">
+                    <p>Total Filtered Amount: <span id="filtered-total">₹ 0</span></p>
+                </div>
+
+                <div class="history-card"
+                    style="margin: 0 30px; background: #2c3e50; border-radius: 15px; padding: 20px; max-height: 500px; overflow-y: auto;">
+                    <ul id="history-list" class="transaction-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-section" style="display: none;">
+            <div class="title-container">
+                <div class="welcome-text">
+                    <h1>Settings</h1>
+                    <p>Manage profile</p>
+                </div>
+            </div>
+
+            <div class="settings-container">
+                <div class="settings-card">
+                    <h3>👤 Profile Picture</h3>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <img src="https://via.placeholder.com/100" id="preview-img"
+                            style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #a020f0;">
+                        <input type="file" id="profile-upload" accept="image/*" onchange="previewFile()">
+                    </div>
+                    <button class="save-btn" onclick="saveProfilePic()" style="margin-top: 15px;">Update Photo</button>
+
+                    <h3 style="margin-top: 20px;">🌓 Appearance</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <p>Dark Mode</p>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle" onclick="toggleTheme()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>✏️ Edit Profile</h3>
+                    <div class="input-group">
+                        <label>Display Name</label>
+                        <input type="text" id="edit-name" placeholder="Your Name">
+                    </div>
+                    <div class="input-group">
+                        <label>Email (Cannot change)</label>
+                        <input type="text" id="edit-email" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    </div>
+                    <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+                </div>
+
+                <div class="settings-card danger-zone"
+                    style="background: #fff5f5 !important; border: 2px solid #ff4d4d;">
+                    <h3 style="color: #d63031 !important;">🚨 Danger Zone</h3>
+                    <p style="color: #333;">Resetting will wipe all transactions but keep your login.</p>
+                    <button class="delete-all-btn" onclick="resetAllData()" style="margin-bottom: 10px;">
+                        <span class="material-icons">delete_forever</span> Reset Transactions
+                    </button>
+                    <button class="delete-account-btn" onclick="deleteAccount()"
+                        style="width:100%; background:#d63031; color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-weight:bold;">
+                        Permanently Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="expense-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Transaction</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="expenseForm">
+                <div class="input-group">
+                    <label>Title</label>
+                    <input type="text" id="t-title" placeholder="e.g. Momos" required>
+                </div>
+                <div class="input-group">
+                    <label>Amount</label>
+                    <input type="number" id="t-amount" placeholder="0.00" required>
+                </div>
+                <div class="input-group">
+                    <label>Type</label>
+                    <select id="t-type" class="custom-select">
+                        <option value="expense">Expense</option>
+                        <option value="income">Income</option>
+                    </select>
+                </div>
+                <button type="submit" class="save-btn">SAVE</button>
+            </form>
+        </div>
+    </div>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Expense Cal | Made with ❤️ for Learning</p>
+            <div class="footer-links">
+                <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+                <a href="#" onclick="showSection('history')">History</a>
+                <a href="https://github.com/esportsplayeransh-prog/Expense-calculator#" target="_blank">Source Code</a>
+            </div>
+        </div>
+    </footer>
+    <div id="toast-box"></div>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
